@@ -77,7 +77,7 @@ def build_model():
     
     return model
 
-def evaluate_model(model, X_test, Y_test, grid_search = False):
+def evaluate_model(model, X_test, Y_test):
     # make predictions
     Y_pred = model.predict(X_test)
     
@@ -91,19 +91,17 @@ def evaluate_model(model, X_test, Y_test, grid_search = False):
     
     # Grid Search
     # hyperparameters
-    if grid_search:
-        parameters =  {
-            'clf__estimator__n_estimators': [10],
-            'clf__estimator__min_samples_split': [2, 4],
-        }
+    parameters =  {
+        'clf__estimator__n_estimators': [10],
+        'clf__estimator__min_samples_split': [2, 4],
+    }
 
-        grid = GridSearchCV(pipeline, param_grid = parameters)
-        grid.fit(X_train, Y_train)
-        print('Best parameters: ', grid.best_params_)
+    grid = GridSearchCV(pipeline, param_grid = parameters)
+    grid.fit(X_train, Y_train)
+    print('Best parameters: ', grid.best_params_)
 
-        final_model = grid.best_params_
+    final_model = grid.best_params_
     
-    final_model = model
     return final_model
 
 def save_model(final_model, model_filepath):                                    ## and is this correct?
