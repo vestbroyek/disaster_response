@@ -45,6 +45,7 @@ def index():
     genre_names = list(genre_counts.index)
 
     type_counts = df.iloc[:, 5:40].sum(axis = 0)
+    type_counts = type_counts.sort_values(ascending = False)
     type_names = list(type_counts.index)
     
     # create visuals
@@ -81,11 +82,8 @@ def index():
                 'yaxis': {
                     'title': "Count"
                 },
-                'xaxis': {
-                    'title': "Message type"
                 }             
             }
-        }
     ]
     
     # encode plotly graphs in JSON
