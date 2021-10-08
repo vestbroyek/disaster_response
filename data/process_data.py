@@ -9,6 +9,20 @@ from sqlalchemy import create_engine
 
 # loading in data
 def load_data(messages_filepath, categories_filepath):
+    """Ingests two csvs (messages and categories) and merges them on their ID columns
+    
+    Parameters
+    -----------
+    messages_filepath : str
+            The filepath to the messages csv
+    categories_filepath : str
+            The filepath to the categories csv
+            
+    Returns
+    -----------
+    df
+            The merged pandas DataFrame
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
 # merging dfs on id column
@@ -17,6 +31,18 @@ def load_data(messages_filepath, categories_filepath):
 
 # cleaning data
 def clean_data(df):
+    """Cleans the dataframe: creates clear category columns, fixes headers, removes duplicates
+    
+    Parameters
+    -----------
+    df : a pandas DataFrame
+            The dataframe to be cleaned
+            
+    Returns
+    -----------
+    df : a pandas DataFrame
+            The cleaned dataframe
+    """
     # splitting categories into separate columns
     # first create a separate dataframe of the 36 categories
     categories = df['categories'].str.split(pat = ';', expand = True)
@@ -51,7 +77,19 @@ def clean_data(df):
     return df
     
 def save_data(df, database_filename):
-    # saving clean df into a sqlite database
+    """Saves the clean dataframe to a SQL database
+    
+    Parameters
+    -----------
+    df : a pandas DataFrame
+            The dataframe to be cleaned
+    database_filename : str
+            A filename for the SQL database to be created
+            
+    Returns
+    -----------
+    None
+    """
     # engine = create_engine(database_filename)
     engine = create_engine('sqlite:///{}'.format(database_filename))
     df.to_sql('DisasterResponse', engine, index = False)
