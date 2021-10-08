@@ -96,7 +96,7 @@ def evaluate_model(model, X_test, Y_test):
         'clf__estimator__min_samples_split': [2, 4],
     }
 
-    grid = GridSearchCV(pipeline, param_grid = parameters)
+    grid = GridSearchCV(model, param_grid = parameters)
     grid.fit(X_train, Y_train)
     print('Best parameters: ', grid.best_params_)
 
