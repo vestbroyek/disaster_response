@@ -71,9 +71,7 @@ def build_model():
     
     # splitting data into train and test
     # X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2)  # commenting out for now because train_test is under __main__
-    
-    # training model on pipeline
-    # model = pipeline.fit(X_train, Y_train)                                        # also commenting out because model.fit is under __main__
+
     
     return model
 
@@ -89,25 +87,12 @@ def evaluate_model(model, X_test, Y_test):
     accuracy = (Y_pred == Y_test).mean()
     print("Overall accuracy: ", accuracy)
     
-    # Grid Search
-    # hyperparameters
-    parameters =  {
-        'clf__estimator__n_estimators': [10],
-        'clf__estimator__min_samples_split': [2, 4],
-    }
+    return model
 
-    grid = GridSearchCV(pipeline, param_grid = parameters)
-    grid.fit(X_train, Y_train)
-    print('Best parameters: ', grid.best_params_)
-
-    final_model = grid.best_params_
-    
-    return final_model
-
-def save_model(final_model, model_filepath):                                    ## and is this correct?
+def save_model(model, model_filepath):                                    ## and is this correct?
     filename = 'classifier.pkl'
     model_filepath = 'models/classifier.pkl'
-    pickle.dump(final_model, open(model_filepath, 'wb'))
+    pickle.dump(model, open(model_filepath, 'wb'))
 
 def main():
     if len(sys.argv) == 3:
@@ -121,6 +106,25 @@ def main():
         
         print('Training model...')
         model.fit(X_train, Y_train)
+
+        ### Grid search
+        print('Performing grid search...')
+
+        parameters =  {
+        'clf__estimator__n_estimators': [10],
+        'clf__estimator__min_samples_split': [2, 4],
+        }
+
+        grid = GridSearchCV(model, param_grid = parameters, refit = True)
+
+        # refitting
+        grid.fit(X_train, Y_train)
+        
+        print('Best parameters: ', grid.best_params_)
+
+        model = grid.best_estimator_
+
+        ####
         
         print('Evaluating model...')
         #evaluate_model(model, X_test, Y_test, category_names)
