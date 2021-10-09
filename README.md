@@ -20,7 +20,7 @@ This folder contains two HTML files that will render the front-end of the Flask 
 ### run.py
 This script will execute the whole project: ingesting and cleaning data, training and tuning the model, and creating the front-end Flask app. 
 
-## How to run
+## How to run
 Run the following commands in the project's root directory:
   ### To create the database (ETL pipeline):
       `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
@@ -28,5 +28,5 @@ Run the following commands in the project's root directory:
       `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
   ### To deploy the Flask app to a local server
       `python run.py`
-  ### To access the app
+  ### To access the app
       Go to http://0.0.0.0:3001/
