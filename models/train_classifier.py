@@ -29,7 +29,22 @@ import pickle
 
 # loading in data
 def load_data(database_filepath):
-    # database_filepath = './data/DisasterResponse.db'                                  ## Is this correct?
+    """Loads in processed data from SQL database, splits into X and Y
+    
+    Parameters
+    -----------
+    database_filepath : str
+            The filepath where the database is saved
+            
+    Returns
+    -----------
+    X : pandas DataFrame
+            The feature variable for the model
+    Y : pandas DataFrame
+            The 36 target variables for the model
+    category_names : array
+            A list of names of the categories to be classified
+    """
     database_filepath = 'data/DisasterResponse.db'
     name = 'sqlite:///' + database_filepath
     engine = db.create_engine(name)
@@ -46,6 +61,11 @@ def load_data(database_filepath):
 
 # tokenising text
 def tokenize(text):
+    """Tokenizes text, normalises case, removes stop words
+    
+    Returns
+    -----------
+    tokens to be used in CountVectorizer"""
     # initialising lemmatiser
     lemmatizer = WordNetLemmatizer()
     # loading in stop words
@@ -61,21 +81,39 @@ def tokenize(text):
 
 # training the model
 def build_model():
+    """Builds machine learning pipeline
+    
+    Parameters
+    -----------
+    None
+    
+    Returns
+    -----------
+    model : Pipeline object
+            A Pipeline object on which to fit the data"""
     # building a pipeline
     model = Pipeline([                                                              # calling this 'model' so it can be fit under __main__
         ('vect', CountVectorizer(tokenizer = tokenize)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
-    
-    
-    # splitting data into train and test
-    # X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2)  # commenting out for now because train_test is under __main__
 
-    
     return model
 
 def evaluate_model(model, X_test, Y_test):
+    """Makes predictions and evaluates accuracy on every category
+    
+    Parameters
+    -----------
+    model : Pipeline object (or other ML model object)
+    X_test : pandas DataFrame
+            X to predict
+    Y_test : pandas DataFrame
+            Y to verify predictions against
+    
+    Returns
+    -----------
+    model : Pipeline object"""
     # make predictions
     Y_pred = model.predict(X_test)
     
@@ -89,7 +127,20 @@ def evaluate_model(model, X_test, Y_test):
     
     return model
 
-def save_model(model, model_filepath):                                    ## and is this correct?
+def save_model(model, model_filepath):
+    """Saves model as Pickle file
+    
+    Parameters
+    -----------
+    model : a Pipeline object
+            The model to be saved
+    model_filepath : str
+            The filepath for where to save the model
+            
+    Returns
+    -----------
+    none
+    """
     filename = 'classifier.pkl'
     model_filepath = 'models/classifier.pkl'
     pickle.dump(model, open(model_filepath, 'wb'))
