@@ -24,7 +24,7 @@ This script will execute the whole project: ingesting and cleaning data, trainin
 Run the following commands in the project's root directory:
   ### To create the database (ETL pipeline):
  `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-  ### To build the model (ML pipeline):
+  ### To build the model (ML pipeline):
 `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
   ### To deploy the Flask app to a local server
 `python run.py`
