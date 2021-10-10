@@ -64,6 +64,9 @@ def clean_data(df):
         categories[column] = categories[column].str[-1]
         # convert column from str to itn
         categories[column] = categories[column].astype(int)
+    
+    # dropping rows where 'related' = 2 (which makes no sense)
+    categories = categories[categories['related'] != 2]
         
     # replacing categories column in df with the cleaned category columns
     # first drop the old column
